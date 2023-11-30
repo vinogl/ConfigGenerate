@@ -27,10 +27,8 @@ dns:
   enhance-dns: true
 
 proxies:
-  $$PROXY_CONFIG$$
 
 proxy-groups:
-  $$PROXY_GROUPS$$
 
 rules:
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
