@@ -1,11 +1,10 @@
-from method import generate_groups
-import json
+from method import generate_groups, format_file
 import yaml
 import os
 
 # 读取文件路径
-with open('Files/files_path.json', 'r') as f:
-    file_info = json.load(f)
+with open('Files/files_path.yaml', 'r') as f:
+    file_info = yaml.safe_load(f)
 
 proxy_file = file_info["clash_proxies"]  # 代理组文件路径
 template_file = file_info["clash_config_template"]  # 模板文件路径
@@ -23,4 +22,7 @@ with open(template_file, 'r') as f:
 
 # 保存配置文件到指定路径
 with open(save_path, 'w') as f:
-    yaml.dump(template, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
+    yaml.dump(template, f, sort_keys=False, allow_unicode=True, default_flow_style=False, width=1000)
+
+# 格式化配置文件
+format_file(save_path)

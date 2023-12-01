@@ -1,10 +1,10 @@
 from urllib.parse import urlsplit
-from base64 import b64encode, b64decode
+from base64 import b64decode
 import json
 import yaml
 
 
-def url2config(proxy_url):
+def url2config(proxy_url: str) -> dict:
     """
     将vmess的节点转换为clash配置
     """
@@ -35,16 +35,16 @@ def url2config(proxy_url):
     return clash_config
 
 
-def generate_groups(proxy_file):
+def generate_groups(proxy_file: str) -> tuple[list, list]:
     """
     读取代理组文件，生成代理配置和代理组配置
     """
     with open(proxy_file, 'r') as f:
-        group_list = yaml.safe_load(f)
+        proxies_group = yaml.safe_load(f)
 
-    proxy_config = []  # 用于保存代理配置
-    proxy_group = []  # 用于保存代理组配置
-    for group_name, proxies in group_list.items():
+    config_list = []  # 用于保存代理配置
+    group_list = []  # 用于保存代理组配置
+    for group_name, proxies in proxies_group.items():
         # 遍历读取的代理组信息
         temp_group = {"name": group_name, "type": "select", "proxies": []}
 
@@ -56,11 +56,25 @@ def generate_groups(proxy_file):
             else:
                 # 解析节点链接，生成代理和代理组配置
                 clash_config = url2config(proxy_url)
-                # 将clash_config转换为str型，并删掉里面的所有'
-                proxy_config.append(clash_config)
+                config_list.append(str(clash_config))  # clash_config转换为str存入代理配置
                 temp_group["proxies"].append(clash_config["name"])
 
-        proxy_group.append(temp_group)  # 保存代理组配置
+        group_list.append(temp_group)  # 保存代理组配置
 
     # 返回代理配置和代理组配置
-    return proxy_config, proxy_group
+    return config_list, group_list
+
+
+def format_file(config_file: str):
+    """
+    格式化配置文件，删除所有的“'”
+    """
+    with open(config_file, 'r') as f:
+        # 读取配置文件
+        lines = f.readlines()
+
+    format_lines = [line.replace("'", "") for line in lines]  # 删除所有的“'”
+
+    with open(config_file, 'w') as f:
+        # 保存格式化后的配置文件
+        f.writelines(format_lines)
