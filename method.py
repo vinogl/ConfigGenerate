@@ -65,7 +65,7 @@ def generate_groups(proxy_file: str) -> tuple[list, list]:
     return config_list, group_list
 
 
-def format_file(config_file: str):
+def format_file(config_file):
     """
     格式化配置文件，删除所有的“'”
     """
