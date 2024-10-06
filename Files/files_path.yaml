@@ -5,4 +5,4 @@ clash_config_filename: Clash.yaml
 node_file: Files/node_list.txt
 node_sub_filename: NodeSub.txt
 
-save_path: /Users/GongLi/Documents/GitManage/ConfigFiles
+save_path: /Users/GongLi/Documents/Projects/ConfigFiles
