@@ -1,14 +1,14 @@
-import yaml
-import os
 from base64 import b64encode
+import argparse
 
-# 读取文件路径
-with open('Files/files_path.yaml', 'r') as f:
-    file_info = yaml.safe_load(f)
 
-node_file = file_info["node_file"]  # 代理组文件路径
-sub_filename = file_info["node_sub_filename"]  # 生成的配置文件名
-save_path = os.path.join(file_info["save_path"], sub_filename)  # 生成配置文件的保存路径
+parser = argparse.ArgumentParser(description="从节点文件生成订阅")
+parser.add_argument("--proxies", required=True, help="代理文件路径")
+parser.add_argument("--output", required=True, help="输出订阅文件路径")
+args = parser.parse_args()
+
+node_file = args.proxies
+save_path = args.output
 
 # 读取节点文件，生成订阅内容
 with open(node_file, 'rb') as file:

@@ -1,15 +1,18 @@
 from method import generate_groups, format_file
 import yaml
-import os
+import argparse
 
-# 读取文件路径
-with open('Files/files_path.yaml', 'r') as f:
-    file_info = yaml.safe_load(f)
 
-proxy_file = file_info["clash_proxies"]  # 代理组文件路径
-template_file = file_info["clash_config_template"]  # 模板文件路径
-config_filename = file_info["clash_config_filename"]  # 生成的配置文件名
-save_path = os.path.join(file_info["save_path"], config_filename)  # 生成配置文件的保存路径
+# 命令行参数
+parser = argparse.ArgumentParser(description="从代理列表和模板生成 Clash 配置")
+parser.add_argument("--proxies", required=True, help="代理文件路径")
+parser.add_argument("--template", required=True, help="模板文件路径")
+parser.add_argument("--output", required=True, help="输出订阅文件路径")
+args = parser.parse_args()
+
+proxy_file = args.proxies
+template_file = args.template
+save_path = args.output
 
 # 生成代理配置和代理组信息，用于替换模板中的占位符
 proxy_config, proxy_groups = generate_groups(proxy_file)
